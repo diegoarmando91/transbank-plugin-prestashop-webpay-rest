@@ -2,7 +2,6 @@
 
 namespace PrestaShop\Module\WebpayPlus\Utils;
 
-use Exception;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Monolog\Formatter\LineFormatter;
@@ -15,7 +14,6 @@ class LogHandler
     const LOG_DEBUG_ENABLED = false; //enable or disable debug logs
     const LOG_INFO_ENABLED = true; //enable or disable info logs
     const LOG_ERROR_ENABLED = true; //enable or disable error logs
-    const DEFAULT_CONF_DAYS = 7;
 
     private $timestamp;
     private $idTransaction;
@@ -124,7 +122,7 @@ class LogHandler
         if (!file_exists($this->lockfile)) {
             $file = fopen($this->lockfile, 'w') or exit('No se puede crear archivo de bloqueo');
             if (!is_numeric($this->confdays) or $this->confdays == null or $this->confdays == '' or $this->confdays === false) {
-                $this->confdays = self::DEFAULT_CONF_DAYS;
+                $this->confdays = $days;
             }
             $txt = "{$this->confdays}\n";
             fwrite($file, $txt);
@@ -381,7 +379,7 @@ class LogHandler
         $status = $this->getValidateLockFile();
         if ($method == 'initTransaction') {
             $cookie_value = (string) $id;
-            setcookie('buyorder', $cookie_value, time() + 30, '/', true, true); // 86400 = 1 day
+            setcookie('buyorder', $cookie_value, time() + 30, '/'); // 86400 = 1 day
         } elseif ($method == 'acknowledgeTransaction' and isset($_COOKIE['buyorder'])) {
             $id = $_COOKIE['buyorder'];
         }

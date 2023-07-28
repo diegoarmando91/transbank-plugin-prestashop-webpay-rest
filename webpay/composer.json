@@ -2,13 +2,14 @@
     "require": {
         "transbank/transbank-sdk": "~2.0",
         "monolog/monolog": "^1.27",
-        "guzzlehttp/guzzle": "^5",
+        "guzzlehttp/guzzle":"^7.4.5",
+        "tecnickcom/tcpdf": "^6.3",
         "ext-json": "*",
-        "php": ">=7.0"
+        "php": ">=7.4"
     },
     "config": {
         "platform": {
-            "php": "7.0"
+            "php": "7.4"
         }
     },
     "autoload": {

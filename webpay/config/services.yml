@@ -1,6 +1,5 @@
 services:
-  _defaults:
-    public: true
+
   # Grid services
 
   # webpayplus Form services
@@ -28,6 +27,7 @@ services:
       - '@webpay.form.webpay_plus_form_data_provider'
       - 'PrestaShop\Module\WebpayPlus\Form\WebpayPlusType'
       - 'WebpayPlus'
+    public: true
 
   webpay.form.webpay_plus_data_configuration:
     class: PrestaShop\Module\WebpayPlus\Form\WebpayPlusDataConfiguration
@@ -59,6 +59,7 @@ services:
       - '@webpay.form.oneclick_form_data_provider'
       - 'PrestaShop\Module\WebpayPlus\Form\OneclickType'
       - 'WebpayPlus'
+    public: true
 
   webpay.form.oneclick_data_configuration:
     class: PrestaShop\Module\WebpayPlus\Form\OneclickDataConfiguration
@@ -89,6 +90,7 @@ services:
       - '@webpay.form.diagnosis_form_data_provider'
       - 'PrestaShop\Module\WebpayPlus\Form\DiagnosisType'
       - 'WebpayPlus'
+    public: true
 
   webpay.form.diagnosis_data_configuration:
     class: PrestaShop\Module\WebpayPlus\Form\DiagnosisDataConfiguration

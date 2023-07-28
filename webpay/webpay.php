@@ -44,7 +44,7 @@ class WebPay extends PaymentModule
     {
         $this->name = 'webpay';
         $this->tab = 'payments_gateways';
-        $this->version = '1.0.0';
+        $this->version = '3.0.0';
         $this->author = 'Transbank';
         $this->need_instance = 1;
         $this->bootstrap = true;
@@ -53,7 +53,7 @@ class WebPay extends PaymentModule
         $this->displayName = 'Webpay Plus';
         $this->description = 'Recibe pagos en línea con tarjetas de crédito y Redcompra en tu Prestashop a través de Webpay Plus y Oneclick';
         $this->confirmUninstall = '¿Estás seguro/a que deseas desinstalar este módulo de pago?';
-        $this->ps_versions_compliancy = array('min' => '1.7.6.0', 'max' => _PS_VERSION_);
+        $this->ps_versions_compliancy = array('min' => '8.0.0', 'max' => _PS_VERSION_);
         $this->pluginValidation();
         try {
             $this->log = new LogHandler();
@@ -88,6 +88,7 @@ class WebPay extends PaymentModule
         return  $result &&
             $this->registerHook('paymentOptions') &&
             $this->registerHook('paymentReturn') &&
+            $this->registerHook('displayPayment') &&
             $this->registerHook('displayPaymentReturn') &&
             $this->registerHook('displayAdminOrderLeft') &&
             $this->registerHook($this->getDisplayOrderHookName());
@@ -372,6 +373,90 @@ class WebPay extends PaymentModule
         $route = SymfonyContainer::getInstance()->get('router')->generate('ps_controller_webpay_configure');
         Tools::redirectAdmin($route);
 
+        /*
+        $activeShopID = (int)Context::getContext()->shop->id;
+        $shopDomainSsl = Tools::getShopDomainSsl(true, true);
+
+        $this->updateSettings();
+        $healthcheck = $this->createHealthCheck();
+
+        if ($this->getFormWebpayEnvironment() === 'LIVE') {
+            $this->sendMetrics();
+        }
+
+        $this->datos_hc = json_decode($healthcheck->printFullResume());
+
+        $ostatus = new OrderState(1);
+        $statuses = $ostatus->getOrderStates(1);
+
+        Context::getContext()->smarty->assign(
+            array(
+                'paymentAcceptedStatusId' => Configuration::get('PS_OS_PAYMENT'),
+                'preparationStatusId' => Configuration::get('PS_OS_PREPARATION'),
+                'payment_states' => $statuses,
+                'errors' => $this->_errors,
+                'post_url' => $_SERVER['REQUEST_URI'],
+
+                //webpay_updateSettings
+                'data_webpay_commerce_code_default' => $this->getDefaultWebpayCommerceCode(),//data_storeid_init
+                'data_webpay_apikey_default' => $this->getDefaultWebpayApiKey(),//data_apikeysecret_init
+                'data_webpay_commerce_code' => $this->getWebpayCommerceCode(),//data_storeid
+                'data_webpay_apikey' => $this->getWebpayApiKey(),//data_apikeysecret
+                'data_webpay_environment' => $this->getWebpayEnvironment(),//data_environment
+                'data_webpay_order_after_payment' => $this->getWebpayOrderAfterPayment(),//data_order_after_payment
+
+                'data_oneclick_mall_commerce_code_default' => $this->getDefaultOneclickMallCommerceCode(),
+                'data_oneclick_child_commerce_code_default' => $this->getDefaultOneclickChildCommerceCode(),
+                'data_oneclick_apikey_default' => $this->getDefaultOneclickApiKey(),
+                'data_oneclick_mall_commerce_code' => $this->getOneclickMallCommerceCode(),
+                'data_oneclick_child_commerce_code' => $this->getOneclickChildCommerceCode(),
+                'data_oneclick_apikey' => $this->getOneclickApiKey(),
+                'data_oneclick_environment' => $this->getOneclickEnvironment(),
+                'data_oneclick_order_after_payment' => $this->getOneclickOrderAfterPayment(),
+                'img_oneclick' =>  _PS_MODULE_DIR_.'/webpay/views/img/oneclick.png',
+
+                'data_debug_active' => $this->getDebugActive(),
+                'data_title' => $this->title,
+                'version' => $this->version,
+                'api_version' => '1.0',
+                'img_icono' => "https://www.transbank.cl/public/img/LogoWebpay.png",
+                'init_status' => null, //$this->datos_hc->validate_init_transaction->status->string,
+                'init_error_error' => null, //(isset($this->datos_hc->validate_init_transaction->response->error)) ? $this->datos_hc->validate_init_transaction->response->error : NULL,
+                'init_error_detail' => null, // (isset($this->datos_hc->validate_init_transaction->response->detail)) ? $this->datos_hc->validate_init_transaction->response->detail : NULL,
+                'init_success_url' => null, //$this->datos_hc->validate_init_transaction->response->url,
+                'init_success_token' => null, //$this->datos_hc->validate_init_transaction->response->token_ws,
+                'php_status' => $this->datos_hc->server_resume->php_version->status,
+                'php_version' => $this->datos_hc->server_resume->php_version->version,
+                'server_version' => $this->datos_hc->server_resume->server_version->server_software,
+                'ecommerce' => $this->datos_hc->server_resume->plugin_info->ecommerce,
+                'ecommerce_version' => $this->datos_hc->server_resume->plugin_info->ecommerce_version,
+                'current_plugin_version' => $this->datos_hc->server_resume->plugin_info->current_plugin_version,
+                'last_plugin_version' => $this->datos_hc->server_resume->plugin_info->last_plugin_version,
+                'openssl_status' => $this->datos_hc->php_extensions_status->openssl->status,
+                'openssl_version' => $this->datos_hc->php_extensions_status->openssl->version,
+                'SimpleXML_status' => $this->datos_hc->php_extensions_status->SimpleXML->status,
+                'SimpleXML_version' => $this->datos_hc->php_extensions_status->SimpleXML->version,
+                'soap_status' => $this->datos_hc->php_extensions_status->soap->status,
+                'soap_version' => $this->datos_hc->php_extensions_status->soap->version,
+                'dom_status' => $this->datos_hc->php_extensions_status->dom->status,
+                'dom_version' => $this->datos_hc->php_extensions_status->dom->version,
+                'php_info' => $this->datos_hc->php_info->string->content,
+                'lockfile' => json_decode($this->log->getLockFile(), true)['status'],
+                'logs' => (isset(json_decode($this->log->getLastLog(), true)['log_content'])) ?  json_decode($this->log->getLastLog(), true)['log_content'] : null,
+                'log_file' => (isset(json_decode($this->log->getLastLog(), true)['log_file'])) ?  json_decode($this->log->getLastLog(), true)['log_file'] : null,
+                'log_weight' => (isset(json_decode($this->log->getLastLog(), true)['log_weight'])) ?  json_decode($this->log->getLastLog(), true)['log_weight'] : null,
+                'log_regs_lines' => (isset(json_decode($this->log->getLastLog(), true)['log_regs_lines'])) ?  json_decode($this->log->getLastLog(), true)['log_regs_lines'] : null,
+                'log_days' => $this->log->getValidateLockFile()['max_logs_days'],
+                'log_size' => $this->log->getValidateLockFile()['max_log_weight'],
+                'log_dir' => json_decode($this->log->getResume(), true)['log_dir'],
+                'logs_count' => json_decode($this->log->getResume(), true)['logs_count']['log_count'],
+                'logs_list' => json_decode($this->log->getResume(), true)['logs_list'],
+
+                'view_base' => _PS_MODULE_DIR_.'/webpay/views/templates',
+            )
+        );
+
+        return $this->display($this->name, 'views/templates/admin/config.tpl');*/
     }
 
     private function pluginValidation()
@@ -385,7 +470,7 @@ class WebPay extends PaymentModule
     public function getDisplayOrderHookName()
     {
         $displayOrder = 'displayAdminOrderLeft';
-        if (version_compare(_PS_VERSION_, '1.7.7.0', '>=')) {
+        if (version_compare(_PS_VERSION_, '8.0.0', '>=')) {
             $displayOrder = 'displayAdminOrderTabContent';
         }
 

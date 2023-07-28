@@ -100,7 +100,7 @@ class WebPayOneclickPaymentValidateModuleFrontController extends PaymentModuleFr
 
         if (!$saved) {
             $this->logOneclickPaymentCrearTxBdError($inscriptionId, $transaction);
-            $this->setPaymentErrorPage('No se pudo guardar en base de datos el resultado de la transacción ');
+            return $this->setPaymentErrorPage('No se pudo guardar en base de datos el resultado de la transacción ');
         }
 
         $this->logOneclickPaymentAntesAutorizarTx($ins->username, $ins->tbk_token, $parentBuyOrder, $childBuyOrder, $amount);

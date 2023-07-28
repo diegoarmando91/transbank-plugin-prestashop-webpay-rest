@@ -1,4 +1,7 @@
 {% extends '@PrestaShop/Admin/layout.html.twig' %}
+{% form_theme webpayPlusForm '@PrestaShop/Admin/TwigTemplateForm/prestashop_ui_kit.html.twig' %}
+{% form_theme oneclickForm '@PrestaShop/Admin/TwigTemplateForm/prestashop_ui_kit.html.twig' %}
+
    
 {% block content %}
     {% include '@Modules/webpay/views/templates/admin/webpay_configure.html.twig'%}

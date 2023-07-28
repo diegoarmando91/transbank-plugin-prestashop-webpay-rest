@@ -1,8 +1,8 @@
-# Transbank Prestashop Webpay
-Plugin oficial de Webpay para Prestashop
+# Transbank Prestashop 8 Webpay
+Plugin oficial de Webpay para Prestashop 8+
 
 ## Descripción
-Este plugin **oficial** de Transbank te permite integrar Webpay fácilmente en tu sitio Prestashop. Está desarrollado en base al [SDK oficial de PHP](https://github.com/TransbankDevelopers/transbank-sdk-php)
+Este plugin **oficial** de Transbank te permite integrar Webpay fácilmente en tu sitio Prestashop 8+. Está desarrollado en base al [SDK oficial de PHP](https://github.com/TransbankDevelopers/transbank-sdk-php)
 
 ## ¿Cómo instalar?
 Puedes ver las instrucciones de instalación y la documentación completa del plugin en [transbankdevelopers.cl/plugin/prestashop/](https://www.transbankdevelopers.cl/plugin/prestashop/#instalacion)
@@ -26,8 +26,8 @@ Puedes ver más información sobre este proceso en [este link](https://www.trans
 A continuación, encontrarás información necesaria para el desarrollo de este plugin. 
 
 # Requisitos 
-* PHP 7.0+ o superior
-* Prestashop 1.7 o superior
+* PHP 7.4+ o superior
+* Prestashop 8.0 o superior
 
 # Dependencias
 
@@ -48,9 +48,10 @@ Para cumplir estas dependencias, debes instalar [Composer](https://getcomposer.o
 
 Para apoyar el levantamiento rápido de un ambiente de desarrollo, hemos creado la especificación de contenedores a través de Docker Compose.
 
-Para usarlo seguir el siguiente [README Prestashop 8.0.3 con php 8.0](./docker-prestashop-php8.0-pres8.0.3-apache/README.md)  
+Para usarlo seguir el siguiente [README Prestashop 8.0.3 con php 8.0](./docker-prestashop-php8.0-pres8.0.3-apache/README.md)
 
-Para usarlo seguir el siguiente [README Prestashop 1.7.8.5 con php 7.4](./docker-prestashop-php7.4-pres1.7.8.6-apache/README.md)  
+Para usarlo seguir el siguiente [README Prestashop 8.1 con php 8.1](./docker-prestashop-php8.1-pres8.1-apache/README.md)  
+ 
 
 ### Crear el instalador del plugin
 
